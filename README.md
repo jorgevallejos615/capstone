@@ -19,11 +19,13 @@ and both command-driven and interactive terminal interfaces.
 ## Install
 
 ```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-python -m pip install -e ".[dev]"
+uv sync --extra dev
+uv run python main.py
 ```
+
+The second command opens the loop-driven menu used for subject ingestion and sync/async timing,
+local-first validated search, dirty catalog ingestion, analytical reports, administration, and
+quality diagnostics.
 
 Use a descriptive contact address in the user agent when running sustained research:
 
@@ -62,8 +64,9 @@ separate worksheet, while JSON stores datasets as top-level properties.
 ## Development
 
 ```bash
-ruff check .
-pytest
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
 ```
 
 Tests mock the API and do not require network access. Live commands do require internet access and

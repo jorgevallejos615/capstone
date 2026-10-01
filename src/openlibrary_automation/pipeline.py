@@ -11,7 +11,6 @@ import pandas as pd
 
 from .models import Author, Book
 
-
 BOOK_COLUMNS = [
     "key",
     "title",

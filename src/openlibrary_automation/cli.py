@@ -54,8 +54,18 @@ def _show_frame(frame: pd.DataFrame, title: str, rows: int = 15) -> None:
     preview = frame.head(rows)
     preferred = [
         column
-        for column in ("title", "authors", "name", "author", "subject", "first_publish_year",
-                       "edition_count", "work_count", "book_count", "avg_rating")
+        for column in (
+            "title",
+            "authors",
+            "name",
+            "author",
+            "subject",
+            "first_publish_year",
+            "edition_count",
+            "work_count",
+            "book_count",
+            "avg_rating",
+        )
         if column in preview.columns
     ]
     columns = preferred or list(preview.columns[:6])
@@ -133,9 +143,7 @@ def authors(
     _run(_authors_workflow(query, limit, output, fmt))
 
 
-async def _catalog_workflow(
-    queries: list[str], limit: int, output: Path | None, fmt: str
-) -> None:
+async def _catalog_workflow(queries: list[str], limit: int, output: Path | None, fmt: str) -> None:
     async with ResearchService() as service:
         datasets = await service.build_catalog(queries, limit)
     _show_frame(datasets["catalog"], "Deduplicated catalog")
@@ -236,8 +244,7 @@ def menu() -> None:
             authors(Prompt.ask("Author query"), IntPrompt.ask("Limit", default=25), None, "csv")
         elif choice == "4":
             queries = [
-                value.strip()
-                for value in Prompt.ask("Queries (comma-separated)").split(",")
+                value.strip() for value in Prompt.ask("Queries (comma-separated)").split(",")
             ]
             catalog(queries, IntPrompt.ask("Limit per query", default=50), None, "xlsx")
         elif choice == "5":

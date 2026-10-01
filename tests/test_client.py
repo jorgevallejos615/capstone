@@ -22,14 +22,16 @@ async def test_search_uses_cache(tmp_path: Path) -> None:
         )
 
     settings = Settings(cache_path=tmp_path / "cache.sqlite3")
-    async with SQLiteCache(settings.cache_path) as cache:
-        async with OpenLibraryClient(
+    async with (
+        SQLiteCache(settings.cache_path) as cache,
+        OpenLibraryClient(
             settings,
             cache,
             transport=httpx.MockTransport(handler),
-        ) as client:
-            first = await client.search_books("python", limit=1)
-            second = await client.search_books("python", limit=1)
+        ) as client,
+    ):
+        first = await client.search_books("python", limit=1)
+        second = await client.search_books("python", limit=1)
 
     assert first == second
     assert requests == 1
@@ -42,12 +44,14 @@ async def test_work_normalizes_key(tmp_path: Path) -> None:
         return httpx.Response(200, json={"key": "/works/OL123W"})
 
     settings = Settings(cache_path=tmp_path / "cache.sqlite3")
-    async with SQLiteCache(settings.cache_path) as cache:
-        async with OpenLibraryClient(
+    async with (
+        SQLiteCache(settings.cache_path) as cache,
+        OpenLibraryClient(
             settings,
             cache,
             transport=httpx.MockTransport(handler),
-        ) as client:
-            result = await client.work("OL123W")
+        ) as client,
+    ):
+        result = await client.work("OL123W")
 
     assert result["key"] == "/works/OL123W"

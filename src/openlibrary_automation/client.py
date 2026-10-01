@@ -88,10 +88,9 @@ class OpenLibraryClient:
                     await self.cache.set(cache_key, payload)
                 return payload
             except (httpx.TimeoutException, httpx.NetworkError, httpx.HTTPStatusError) as exc:
-                retryable = (
-                    not isinstance(exc, httpx.HTTPStatusError)
-                    or exc.response.status_code in {429, 500, 502, 503, 504}
-                )
+                retryable = not isinstance(
+                    exc, httpx.HTTPStatusError
+                ) or exc.response.status_code in {429, 500, 502, 503, 504}
                 if not retryable or attempt >= self.settings.max_retries:
                     status = response.status_code if response is not None else "network"
                     raise OpenLibraryError(f"Request to {path} failed ({status}): {exc}") from exc
@@ -161,9 +160,7 @@ class OpenLibraryClient:
         normalized = list(dict.fromkeys(keys))
         if concurrent:
             return list(
-                await asyncio.gather(
-                    *(self.work(key, use_cache=use_cache) for key in normalized)
-                )
+                await asyncio.gather(*(self.work(key, use_cache=use_cache) for key in normalized))
             )
         results = []
         for key in normalized:

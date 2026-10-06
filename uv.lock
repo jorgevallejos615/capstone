@@ -503,6 +503,7 @@ dependencies = [
     { name = "pandas" },
     { name = "platformdirs" },
     { name = "rich" },
+    { name = "ruff" },
     { name = "typer" },
 ]
 
@@ -528,6 +529,7 @@ requires-dist = [
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5,<7" },
     { name = "respx", marker = "extra == 'dev'", specifier = ">=0.21,<1" },
     { name = "rich", specifier = ">=13.7,<15" },
+    { name = "ruff", specifier = ">=0.16.9" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.5,<1" },
     { name = "typer", specifier = ">=0.12,<1" },
 ]
